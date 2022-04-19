@@ -72,7 +72,12 @@ export default function Header({ categories }) {
   ]
 
   const actions = [
-    { icon: search, alt: "search", visible: true },
+    {
+      icon: search,
+      alt: "search",
+      visible: true,
+      onClick: () => console.log("search"),
+    },
     { icon: cart, alt: "cart", visible: true, link: "/cart" },
     { icon: account, alt: "account", visible: !matchesMD, link: "/account" },
     {
@@ -83,13 +88,21 @@ export default function Header({ categories }) {
     },
   ]
 
+  const activeIndex = () => {
+    const path = window.location.pathname
+    const index = routes.findIndex(
+      ({ node: { name, link } }) => (link || `/${name.toLowerCase()}`) === path
+    )
+    return index === -1 ? false : index
+  }
+
   const iOS =
     typeof navigator !== "undefined" &&
     /iPad|iPhone|iPod/.test(navigator.userAgent)
 
   const tabs = (
     <Tabs
-      value={0}
+      value={activeIndex()}
       classes={{ indicator: classes.coloredIndicator, root: classes.tabs }}
     >
       {routes.map(r => {
@@ -115,8 +128,15 @@ export default function Header({ categories }) {
       classes={{ paper: classes.drawer }}
     >
       <List disablePadding>
-        {routes.map(r => (
-          <ListItem divider button key={r.node.strapiId}>
+        {routes.map((r, i) => (
+          <ListItem
+            selected={activeIndex() === i}
+            component={Link}
+            to={r.node.link || `/${r.node.name.toLowerCase()}`}
+            divider
+            button
+            key={r.node.strapiId}
+          >
             <ListItemText
               classes={{ primary: classes.listItemText }}
               primary={r.node.name}
@@ -130,7 +150,11 @@ export default function Header({ categories }) {
   return (
     <AppBar color="transparent" elevation={0}>
       <Toolbar>
-        <Button classes={{ root: classes.logoContainer }}>
+        <Button
+          component={Link}
+          to="/"
+          classes={{ root: classes.logoContainer }}
+        >
           <Typography variant="h1">
             <span className={classes.logoText}>VAR </span> X
           </Typography>
@@ -139,9 +163,13 @@ export default function Header({ categories }) {
         {actions.map(action => {
           if (action.visible) {
             return (
-              <IconButton key={action.alt} component={Link} to={action.link}>
+              <IconButton
+                key={action.alt}
+                onClick={action.onClick}
+                component={action.onClick ? undefined : Link}
+                to={action.onClick ? undefined : action.link}
+              >
                 <img
-                  onClick={action.onClick}
                   className={classes.imgIcon}
                   src={action.icon}
                   alt={action.alt}
