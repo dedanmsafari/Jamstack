@@ -2,13 +2,15 @@ import * as React from "react"
 import { Link } from "gatsby"
 
 import Layout from "../components/ui/layout"
-
+import HeroBlock from "../components/Home/heroblock"
+import PromotionalBlock from "../components/Home/promotionalblock"
+import FeaturedProducts from "../components/Home/featuredProducts"
 
 const IndexPage = () => (
   <Layout>
-    {/* <h1>Hi Dedan Msafari</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p> */}
+    <HeroBlock />
+    <PromotionalBlock />
+    <FeaturedProducts />
   </Layout>
 )
 
