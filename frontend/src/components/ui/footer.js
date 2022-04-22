@@ -22,7 +22,10 @@ const useStyles = makeStyles(theme => ({
     },
   },
   linkColumn: {
-    width: "24rem",
+    width: "20rem",
+    [theme.breakpoints.down("xs")]: {
+      width: "14rem",
+    },
   },
   icon: {
     "&:hover": {
