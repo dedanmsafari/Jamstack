@@ -52,6 +52,11 @@ const useStyles = makeStyles(theme => ({
     width: "1.5rem",
     height: "1.5rem",
   },
+  headerText: {
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "3rem",
+    },
+  },
 }))
 
 export default function Header({ categories }) {
@@ -149,13 +154,13 @@ export default function Header({ categories }) {
 
   return (
     <AppBar color="transparent" elevation={0} position="static">
-      <Toolbar>
+      <Toolbar disableGutters>
         <Button
           component={Link}
           to="/"
           classes={{ root: classes.logoContainer }}
         >
-          <Typography variant="h1">
+          <Typography variant="h1" classes={{ root: classes.headerText }}>
             <span className={classes.logoText}>VAR </span> X
           </Typography>
         </Button>
