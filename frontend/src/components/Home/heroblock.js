@@ -9,6 +9,15 @@ const useStyles = makeStyles(theme => ({
   textContainer: {
     padding: "1rem",
   },
+  heading: {
+    fontSize: "4rem",
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "3rem",
+    },
+  },
+  tagline: {
+    fontSize: "1.5rem",
+  },
 }))
 
 const HeroBlock = () => {
@@ -29,14 +38,22 @@ const HeroBlock = () => {
       <Grid item classes={{ root: classes.textContainer }}>
         <Grid container direction="column">
           <Grid item>
-            <Typography align="center" variant="h1">
+            <Typography
+              align="center"
+              variant="h1"
+              classes={{ root: classes.heading }}
+            >
               The Premier
               <br />
               Developer Clothing Line
             </Typography>
           </Grid>
           <Grid item>
-            <Typography align="center" variant="h3">
+            <Typography
+              classes={{ root: classes.tagline }}
+              align="center"
+              variant="h3"
+            >
               high quality, custom-designed shirts, hats and hoodies
             </Typography>
           </Grid>
@@ -47,7 +64,7 @@ const HeroBlock = () => {
           options={defaultOptions}
           width={
             MatchesXS
-              ? "25rem"
+              ? "20rem"
               : MatchesMD
               ? "30rem"
               : MatchesLG
