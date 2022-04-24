@@ -20,8 +20,8 @@ const useStyles = makeStyles(theme => ({
       transform: "scale(1.1)",
     },
     [theme.breakpoints.down("lg")]: {
-      height: "40rem",
-      width: "40rem",
+      height: "35rem",
+      width: "35rem",
       margin: "3rem",
     },
     [theme.breakpoints.down("sm")]: {
@@ -29,22 +29,40 @@ const useStyles = makeStyles(theme => ({
       width: "30rem",
     },
     [theme.breakpoints.down("xs")]: {
-      height: "25rem",
-      width: "25rem",
+      height: "20rem",
+      width: "20rem",
+      margin: "2rem 0",
+      "&:hover": {
+        transform: "scale(1)",
+      },
     },
   },
   marketingContainer: {
     padding: "10rem 0 ",
   },
   icon: {
+    [theme.breakpoints.down("lg")]: {
+      height: "10rem",
+      width: "10rem",
+    },
     [theme.breakpoints.down("sm")]: {
       height: "8rem",
       width: "8rem",
     },
+    [theme.breakpoints.down("xs")]: {
+      height: "5rem",
+      width: "5rem",
+    },
   },
   label: {
+    [theme.breakpoints.down("lg")]: {
+      fontSize: "3rem",
+    },
     [theme.breakpoints.down("sm")]: {
       fontSize: "2.75rem",
+    },
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "2.25rem",
     },
   },
 }))
