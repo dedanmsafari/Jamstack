@@ -1,10 +1,12 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   Grid,
   Typography,
   IconButton,
   Button,
   useTheme,
+  TextField,
+  InputAdornment,
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import clsx from "clsx"
@@ -12,7 +14,8 @@ import clsx from "clsx"
 import Layout from "../components/ui/layout"
 
 import address from "../images/address.svg"
-import phone from "../images/phone-adornment.svg"
+import Phone from "../images/PhoneAdornment.js"
+import nameAdornment from "../images/name-adornment.svg"
 import Email from "../images/EmailAdornment.js"
 import send from "../images/send.svg"
 
@@ -78,11 +81,50 @@ const useStyles = makeStyles(theme => ({
     borderTop: "2px solid #fff",
     borderBottom: "2px solid #fff",
   },
+  textField: {
+    width: "30rem",
+  },
+  input: {
+    color: "#fff",
+  },
+  textFieldContainer: {
+    marginBottom: "1rem",
+  },
+  multilineContainer: {
+    marginTop: "1rem",
+  },
+  emailAdornment: {
+    height: 17,
+    width: 22,
+    marginBottom: 10,
+  },
+  phoneAdornment: {
+    height: 25.122,
+    width: 25.173,
+  },
+  "@global": {
+    ".MuiInput-underline:before, .MuiInput-underline:hover:not(.Mui-disabled):before": {
+      borderBottom: "2px solid #fff",
+    },
+    ".MuiInput-underline:after": {
+      borderBottom: `2px solid ${theme.palette.secondary.main}`,
+    },
+    ".MuiInput-multiline": {
+      border: "2px solid #fff",
+      borderRadius: 10,
+      padding: "1rem",
+    },
+  },
 }))
 
 const Contact = () => {
   const classes = useStyles()
   const theme = useTheme()
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [message, setMessage] = useState("")
+
   return (
     <Layout>
       <Grid
@@ -107,6 +149,76 @@ const Contact = () => {
               }}
             >
               <Typography variant="h4">Contact Us</Typography>
+            </Grid>
+            <Grid item>
+              <Grid container direction="column">
+                <Grid item classes={{ root: classes.textFieldContainer }}>
+                  <TextField
+                    placeholder="Name"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    classes={{ root: classes.textField }}
+                    InputProps={{
+                      classes: { input: classes.input },
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <img src={nameAdornment} alt="name icon" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item classes={{ root: classes.textFieldContainer }}>
+                  <TextField
+                    placeholder="Email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    classes={{ root: classes.textField }}
+                    InputProps={{
+                      classes: { input: classes.input },
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <div className={classes.emailAdornment}>
+                            <Email color={theme.palette.secondary.main} />
+                          </div>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item classes={{ root: classes.textFieldContainer }}>
+                  <TextField
+                    placeholder="Phone Number"
+                    value={phoneNumber}
+                    onChange={e => setPhoneNumber(e.target.value)}
+                    classes={{ root: classes.textField }}
+                    InputProps={{
+                      classes: { input: classes.input },
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <div className={classes.phoneAdornment}>
+                            <Phone color={theme.palette.secondary.main} />
+                          </div>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item classes={{ root: classes.multilineContainer }}>
+                  <TextField
+                    placeholder="Message"
+                    value={message}
+                    onChange={e => setMessage(e.target.value)}
+                    classes={{ root: classes.textField }}
+                    multiline
+                    InputProps={{
+                      disableUnderline: "true",
+                      classes: { input: classes.input },
+                    }}
+                    minRows={8}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
             <Grid
               item
@@ -152,7 +264,9 @@ const Contact = () => {
               classes={{ root: classes.middleInfo }}
             >
               <Grid item classes={{ root: classes.iconContainer }}>
-                <img className={classes.contactIcon} src={phone} alt="phone" />
+                <div className={classes.contactIcon}>
+                  <Phone />
+                </div>
               </Grid>
               <Grid item>
                 <Typography
