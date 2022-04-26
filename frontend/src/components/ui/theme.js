@@ -2,9 +2,7 @@ import { createTheme } from "@material-ui/core/styles"
 
 const green = "#99B898"
 const darkGreen = "#708670"
-const tan = "#FECEA8"
-const lightRed = "#FF847C"
-const red = "#E84A5F"
+
 const offBlack = "#2A363B"
 const grey = "#747474"
 const white = "#FFFFFF"
@@ -14,9 +12,6 @@ const theme = createTheme({
     primary: { main: green },
     secondary: { main: darkGreen },
     common: {
-      tan,
-      lightRed,
-      red,
       offBlack,
       white,
     },
@@ -60,7 +55,6 @@ const theme = createTheme({
       fontFamily: "Montserrat",
       color: grey,
     },
-  
   },
   overrides: {},
 })
