@@ -2,16 +2,17 @@ import React, { useState } from "react"
 import {
   Grid,
   Typography,
-  IconButton,
   Button,
   useTheme,
   TextField,
   InputAdornment,
+  useMediaQuery,
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import clsx from "clsx"
 
 import Layout from "../components/ui/layout"
+import validate from "../components/ui/validator"
 
 import address from "../images/address.svg"
 import Phone from "../images/PhoneAdornment.js"
@@ -21,12 +22,23 @@ import send from "../images/send.svg"
 
 const useStyles = makeStyles(theme => ({
   mainContainer: {
-    height: "40rem",
+    height: "45rem",
     backgroundColor: theme.palette.primary.main,
     marginBottom: "10rem",
+    [theme.breakpoints.down("md")]: {
+      marginTop: "8rem",
+      height: "90rem",
+    },
   },
   formWrapper: {
     height: "100%",
+    [theme.breakpoints.down("md")]: {
+      height: "50%",
+      marginTop: "-8rem",
+    },
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+    },
   },
   formContainer: {
     height: "100%",
@@ -38,6 +50,12 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    [theme.breakpoints.down("sm")]: {
+      width: "30rem",
+    },
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+    },
   },
   titleContainer: {
     marginTop: "-4rem",
@@ -68,6 +86,9 @@ const useStyles = makeStyles(theme => ({
   },
   infoContainer: {
     height: "21.25rem",
+    [theme.breakpoints.down("xs")]: {
+      height: "15.25rem",
+    },
   },
   iconContainer: {
     borderRight: "2px solid #fff",
@@ -76,6 +97,10 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    [theme.breakpoints.down("xs")]: {
+      width: "6rem",
+      height: "5rem",
+    },
   },
   middleInfo: {
     borderTop: "2px solid #fff",
@@ -83,6 +108,9 @@ const useStyles = makeStyles(theme => ({
   },
   textField: {
     width: "30rem",
+    [theme.breakpoints.down("sm")]: {
+      width: "20rem",
+    },
   },
   input: {
     color: "#fff",
@@ -102,6 +130,22 @@ const useStyles = makeStyles(theme => ({
     height: 25.122,
     width: 25.173,
   },
+  multiline: {
+    border: "2px solid #fff",
+    borderRadius: 10,
+    padding: "1rem",
+  },
+  multilineError: {
+    border: `2px solid ${theme.palette.error.main}`,
+  },
+  buttonDisabled: {
+    backgroundColor: theme.palette.grey[600],
+  },
+  sendMessage: {
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "2.5rem",
+    },
+  },
   "@global": {
     ".MuiInput-underline:before, .MuiInput-underline:hover:not(.Mui-disabled):before": {
       borderBottom: "2px solid #fff",
@@ -109,21 +153,59 @@ const useStyles = makeStyles(theme => ({
     ".MuiInput-underline:after": {
       borderBottom: `2px solid ${theme.palette.secondary.main}`,
     },
-    ".MuiInput-multiline": {
-      border: "2px solid #fff",
-      borderRadius: 10,
-      padding: "1rem",
-    },
   },
 }))
 
 const Contact = () => {
   const classes = useStyles()
   const theme = useTheme()
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [phoneNumber, setPhoneNumber] = useState("")
-  const [message, setMessage] = useState("")
+  const matchesMD = useMediaQuery(theme => theme.breakpoints.down("md"))
+  const matchesXS = useMediaQuery(theme => theme.breakpoints.down("xs"))
+
+  const [values, setValues] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  })
+  const [errors, setErrors] = useState({})
+  const fields = {
+    name: {
+      helperText: "you must enter a name",
+      placeholder: "Name",
+      adornment: <img src={nameAdornment} alt="name icon" />,
+    },
+    email: {
+      helperText: "you must enter a valid email",
+      placeholder: "Email",
+      adornment: (
+        <div className={classes.emailAdornment}>
+          <Email color={theme.palette.secondary.main} />
+        </div>
+      ),
+    },
+    phone: {
+      helperText: "you must enter a valid phone number",
+      placeholder: "Phone Number",
+      adornment: (
+        <div className={classes.phoneAdornment}>
+          <Phone color={theme.palette.secondary.main} />
+        </div>
+      ),
+    },
+    message: {
+      helperText: "you must enter a message",
+      placeholder: "Message",
+      inputClasses: {
+        multiline: classes.multiline,
+        error: classes.multilineError,
+      },
+    },
+  }
+
+  const disabled =
+    Object.keys(errors).some(field => errors[field] === true) ||
+    Object.keys(errors).length !== 4
 
   return (
     <Layout>
@@ -132,6 +214,7 @@ const Contact = () => {
         justifyContent="space-around"
         alignItems="center"
         classes={{ root: classes.mainContainer }}
+        direction={matchesMD ? "column" : "row"}
       >
         {/* contact form */}
         <Grid item classes={{ root: classes.formWrapper }}>
@@ -152,82 +235,73 @@ const Contact = () => {
             </Grid>
             <Grid item>
               <Grid container direction="column">
-                <Grid item classes={{ root: classes.textFieldContainer }}>
-                  <TextField
-                    placeholder="Name"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                    classes={{ root: classes.textField }}
-                    InputProps={{
-                      classes: { input: classes.input },
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <img src={nameAdornment} alt="name icon" />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-                <Grid item classes={{ root: classes.textFieldContainer }}>
-                  <TextField
-                    placeholder="Email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    classes={{ root: classes.textField }}
-                    InputProps={{
-                      classes: { input: classes.input },
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <div className={classes.emailAdornment}>
-                            <Email color={theme.palette.secondary.main} />
-                          </div>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-                <Grid item classes={{ root: classes.textFieldContainer }}>
-                  <TextField
-                    placeholder="Phone Number"
-                    value={phoneNumber}
-                    onChange={e => setPhoneNumber(e.target.value)}
-                    classes={{ root: classes.textField }}
-                    InputProps={{
-                      classes: { input: classes.input },
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <div className={classes.phoneAdornment}>
-                            <Phone color={theme.palette.secondary.main} />
-                          </div>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-                <Grid item classes={{ root: classes.multilineContainer }}>
-                  <TextField
-                    placeholder="Message"
-                    value={message}
-                    onChange={e => setMessage(e.target.value)}
-                    classes={{ root: classes.textField }}
-                    multiline
-                    InputProps={{
-                      disableUnderline: "true",
-                      classes: { input: classes.input },
-                    }}
-                    minRows={8}
-                  />
-                </Grid>
+                {Object.keys(fields).map(field => {
+                  const validateHelper = event => {
+                    return validate({ [field]: event.target.value })
+                  }
+                  return (
+                    <Grid
+                      item
+                      classes={{
+                        root:
+                          field === "message"
+                            ? classes.multilineContainer
+                            : classes.textFieldContainer,
+                      }}
+                    >
+                      <TextField
+                        placeholder={fields[field].placeholder}
+                        value={values[field]}
+                        onChange={e => {
+                          const valid = validateHelper(e)
+
+                          if (errors[field] || valid[field] === true) {
+                            setErrors({ ...errors, [field]: !valid[field] })
+                          }
+
+                          setValues({ ...values, [field]: e.target.value })
+                        }}
+                        onBlur={e => {
+                          const valid = validateHelper(e)
+                          setErrors({ ...errors, [field]: !valid[field] })
+                        }}
+                        error={errors[field]}
+                        helperText={errors[field] && fields[field].helperText}
+                        classes={{ root: classes.textField }}
+                        multiline={field === "message"}
+                        minRows={field === "message" ? 8 : undefined}
+                        maxRows={field === "message" ? 8 : undefined}
+                        InputProps={{
+                          classes: {
+                            input: classes.input,
+                            ...fields[field].inputClasses,
+                          },
+                          disableUnderline: field === "message",
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              {fields[field].adornment}
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Grid>
+                  )
+                })}
               </Grid>
             </Grid>
             <Grid
               item
               component={Button}
+              disabled={disabled}
               classes={{
-                root: clsx(classes.blockContainer, classes.buttonContainer),
+                root: clsx(classes.blockContainer, classes.buttonContainer, {
+                  [classes.buttonDisabled]: disabled,
+                }),
               }}
             >
-              <Typography variant="h4">send message</Typography>
+              <Typography variant="h4" classes={{ root: classes.sendMessage }}>
+                send message
+              </Typography>
               <img src={send} className={classes.sendIcon} alt="send message" />
             </Grid>
           </Grid>
@@ -253,7 +327,7 @@ const Contact = () => {
                   classes={{ root: classes.contactInfo }}
                   variant="h2"
                 >
-                  Nakuru @Egerton south St
+                  Egerton,Nakuru {matchesXS ? <br /> : null}Viewpoint
                 </Typography>
               </Grid>
             </Grid>
@@ -288,7 +362,7 @@ const Contact = () => {
                   classes={{ root: classes.contactInfo }}
                   variant="h2"
                 >
-                  dedan@developer.gmail.com
+                  dedan@ {matchesXS ? <br /> : null}developer.gmail.com
                 </Typography>
               </Grid>
             </Grid>
