@@ -203,6 +203,31 @@ const Contact = () => {
     },
   }
 
+  const info = [
+    {
+      label: <span> Egerton,Nakuru {matchesXS ? <br /> : null}Viewpoint </span>,
+      icon: <img className={classes.contactIcon} src={address} alt="address" />,
+    },
+    {
+      label: "0723275041",
+      icon: (
+        <div className={classes.contactIcon}>
+          <Phone />
+        </div>
+      ),
+    },
+    {
+      label: (
+        <span> dedan@ {matchesXS ? <br /> : null}developer.gmail.com </span>
+      ),
+      icon: (
+        <div className={classes.contactEmailIcon}>
+          <Email color={theme.palette.common.white} />
+        </div>
+      ),
+    },
+  ]
+
   const disabled =
     Object.keys(errors).some(field => errors[field] === true) ||
     Object.keys(errors).length !== 4
@@ -242,6 +267,7 @@ const Contact = () => {
                   return (
                     <Grid
                       item
+                      key={field}
                       classes={{
                         root:
                           field === "message"
@@ -277,11 +303,12 @@ const Contact = () => {
                             ...fields[field].inputClasses,
                           },
                           disableUnderline: field === "message",
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              {fields[field].adornment}
-                            </InputAdornment>
-                          ),
+                          startAdornment:
+                            field === "message" ? null : (
+                              <InputAdornment position="start">
+                                {fields[field].adornment}
+                              </InputAdornment>
+                            ),
                         }}
                       />
                     </Grid>
@@ -314,58 +341,27 @@ const Contact = () => {
             classes={{ root: classes.infoContainer }}
             justifyContent="space-between"
           >
-            <Grid item container alignItems="center">
-              <Grid item classes={{ root: classes.iconContainer }}>
-                <img
-                  className={classes.contactIcon}
-                  src={address}
-                  alt="address"
-                />
+            {info.map(({ label, icon }, i) => (
+              <Grid
+                item
+                container
+                key={i}
+                alignItems="center"
+                classes={{ root: i === 1 ? classes.middleInfo : undefined }}
+              >
+                <Grid item classes={{ root: classes.iconContainer }}>
+                  {icon}
+                </Grid>
+                <Grid item>
+                  <Typography
+                    classes={{ root: classes.contactInfo }}
+                    variant="h2"
+                  >
+                    {label}
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Typography
-                  classes={{ root: classes.contactInfo }}
-                  variant="h2"
-                >
-                  Egerton,Nakuru {matchesXS ? <br /> : null}Viewpoint
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid
-              item
-              container
-              alignItems="center"
-              classes={{ root: classes.middleInfo }}
-            >
-              <Grid item classes={{ root: classes.iconContainer }}>
-                <div className={classes.contactIcon}>
-                  <Phone />
-                </div>
-              </Grid>
-              <Grid item>
-                <Typography
-                  classes={{ root: classes.contactInfo }}
-                  variant="h2"
-                >
-                  0723275041
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid item container alignItems="center">
-              <Grid item classes={{ root: classes.iconContainer }}>
-                <div className={classes.contactEmailIcon}>
-                  <Email color={theme.palette.common.white} />
-                </div>
-              </Grid>
-              <Grid item>
-                <Typography
-                  classes={{ root: classes.contactInfo }}
-                  variant="h2"
-                >
-                  dedan@ {matchesXS ? <br /> : null}developer.gmail.com
-                </Typography>
-              </Grid>
-            </Grid>
+            ))}
           </Grid>
         </Grid>
       </Grid>
