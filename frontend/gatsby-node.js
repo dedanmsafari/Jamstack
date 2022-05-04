@@ -1,13 +1,16 @@
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
 
-  const results = await graphql(`
+  const result = await graphql(`
     {
       products: allStrapiProduct {
         edges {
           node {
             name
             strapiId
+            category {
+              name
+            }
           }
         }
       }
@@ -22,20 +25,23 @@ exports.createPages = async ({ graphql, actions }) => {
       }
     }
   `)
-  if (results.errors) {
-    throw results.errors
+  if (result.errors) {
+    throw result.errors
   }
 
-  const products = results.data.products.edges
-  const categories = results.data.categories.edges
+  const products = result.data.products.edges
+  const categories = result.data.categories.edges
 
   products.forEach(product => {
     createPage({
-      path: `/products/${product.node.strapiId}`,
-      component: path.resolve(`./src/templates/product.js`),
+      path: `/${product.node.category.name.toLowerCase()}/${encodeURIComponent(
+        product.node.name.split(" ")[0]
+      )}`,
+      component: require.resolve(`./src/templates/productDetail.js`),
       context: {
         id: product.node.strapiId,
         name: product.node.name,
+        category: product.node.category.name,
       },
     })
   })
@@ -43,7 +49,7 @@ exports.createPages = async ({ graphql, actions }) => {
   categories.forEach(category => {
     createPage({
       path: `/${category.node.name.toLowerCase()}`,
-      component: path.resolve(`./src/templates/category.js`),
+      component: require.resolve(`./src/templates/productList.js`),
       context: {
         id: category.node.strapiId,
         name: category.node.name,
