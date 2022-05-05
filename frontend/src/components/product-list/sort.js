@@ -37,7 +37,7 @@ const Sort = ({ setOption }) => {
         </IconButton>
       </Grid>
       <Grid item xs>
-        <Grid container justify="space-around" alignItems="center">
+        <Grid container justify="space-around">
           {sortOptions.map(option => (
             <Grid item key={option.label}>
               <Chip
